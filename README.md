@@ -1,4 +1,4 @@
-# Website Health Check with Slack Webhooks
+# Website Health Check Script with Slack Webhooks
 
 ## 1. How to start?
 1. Clone repo where ever you can run script frequently
