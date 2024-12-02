@@ -81,13 +81,17 @@ class Database:
     def update_monthly_summary(self, *, back_to_healthy: List[HealthResultDTO]) -> None:
         year_month = datetime.now().strftime("%Y-%m")
         if year_month not in self.data["monthly_summary"]:
-            self.data["monthly_summary"][year_month] = {}
+            self._init_month_in_monthly_summary(year_month=year_month)
         for healthy in back_to_healthy:
             if healthy.url not in self.data["monthly_summary"][year_month]:
                 self.data["monthly_summary"][year_month][healthy.url] = 0
             self.data["monthly_summary"][year_month][
                 healthy.url
             ] += self.get_how_long_was_unhealthy(url=healthy.url)
+
+    def _init_month_in_monthly_summary(self, *, year_month: str):
+        self.data["monthly_summary"][year_month] = {}
+        self.data["monthly_summary"][year_month]["already_send_this_month"] = False
 
     def get_summary_for_moth(
         self,
@@ -103,11 +107,11 @@ class Database:
             ].items()
         ]
 
-    def set_monthly_summary_as_send(self) -> None:
-        self.data["monthly_summary"]["already_send_this_month"] = True
+    def set_monthly_summary_as_send(self, *, year_month: str) -> None:
+        self.data["monthly_summary"][year_month]["already_send_this_month"] = True
 
-    def has_already_send_this_month(self) -> bool:
-        return self.data["monthly_summary"]["already_send_this_month"]
+    def has_already_send_this_month(self, *, year_month: str) -> bool:
+        return self.data["monthly_summary"][year_month]["already_send_this_month"]
 
     def get_how_long_was_unhealthy(self, *, url: str) -> float:
         return round(

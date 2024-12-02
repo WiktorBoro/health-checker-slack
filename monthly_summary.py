@@ -23,9 +23,12 @@ class MonthlySummary:
 
     def execute(self) -> None:
         now = datetime.now()
-        last_month = now - timedelta(days=2)
+        current_year_month = now.strftime("%Y-%m")
+        last_month = now.replace(day=1) - timedelta(days=2)
 
-        has_already_send_this_month = self.repository.has_already_send_this_month()
+        has_already_send_this_month = self.repository.has_already_send_this_month(
+            year_month=current_year_month
+        )
         summary_for_moth = self.repository.get_summary_for_moth(
             year_month=datetime(
                 year=last_month.year,
@@ -62,4 +65,4 @@ class MonthlySummary:
         if summary:
             self.connector.send_monthly_summary(summary=summary)
 
-        self.repository.set_monthly_summary_as_send()
+        self.repository.set_monthly_summary_as_send(year_month=current_year_month)
