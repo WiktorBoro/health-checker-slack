@@ -70,8 +70,9 @@ if __name__ == "__main__":
 
     handler = TimedRotatingFileHandler(
         filename=f"{current_path}/{logs_file_name}",
-        when="D",
-        interval=15,
+        when="W",
+        interval=2,
+        backupCount=2,
     )
     logging.basicConfig(
         encoding="utf-8",
