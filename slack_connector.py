@@ -20,7 +20,7 @@ class SlackConnector:
     )
     DEFAULT_STILL_UNHEALTHY_MESSAGE = "URL {url}, is still dead :firecracker::skull_and_crossbones::firecracker: Total dead time {how_long_was_unhealthy} min"
 
-    DEFAULT_MONTHLY_SUMMARY = "Summary for last month: {summary} The remaining services had 100% efficiency last month!:tada:"
+    DEFAULT_MONTHLY_SUMMARY = "Summary for last month: \n{summary}\n The remaining services had 100% efficiency last month!:tada:"
 
     def __init__(
         self,

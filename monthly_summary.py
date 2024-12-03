@@ -1,4 +1,5 @@
 # monthly_summary.py
+import math
 from datetime import datetime, timedelta
 
 from database import Database
@@ -9,6 +10,7 @@ from slack_connector import SlackConnector
 class MonthlySummary:
     DEFAULT_SEND_AT_HOUR = "11:00"
     AVERAGE_MINUTES_IN_MONTH = 43800
+    ONE_HUNDRED_PERCENT = 100
 
     def __init__(
         self,
@@ -60,9 +62,15 @@ class MonthlySummary:
 
         summary = ""
         for url_with_monthly_dead_time in summary_for_moth:
-            summary += f"{url_with_monthly_dead_time.url}: {url_with_monthly_dead_time.unhealthy_this_month} min, efficiency: {round((self.AVERAGE_MINUTES_IN_MONTH-url_with_monthly_dead_time.unhealthy_this_month)/self.AVERAGE_MINUTES_IN_MONTH, 2)}%\n"
+            summary += "--------------------------------------------------\n"
+            summary += f"{url_with_monthly_dead_time.url}: {url_with_monthly_dead_time.unhealthy_this_month} min, efficiency: {self._get_percent_efficiency(unhealthy_this_month=url_with_monthly_dead_time.unhealthy_this_month)}%\n"
 
         if summary:
             self.connector.send_monthly_summary(summary=summary)
 
         self.repository.set_monthly_summary_as_send(year_month=current_year_month)
+
+    def _get_percent_efficiency(self, *, unhealthy_this_month: int) -> float:
+        return math.floor(((self.AVERAGE_MINUTES_IN_MONTH-unhealthy_this_month)/self.AVERAGE_MINUTES_IN_MONTH* self.ONE_HUNDRED_PERCENT)*10**2)/10**2
+
+
