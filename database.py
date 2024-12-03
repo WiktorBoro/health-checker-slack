@@ -105,6 +105,7 @@ class Database:
             for url, unhealthy_this_month in self.data["monthly_summary"][
                 year_month
             ].items()
+            if url != "already_send_this_month" and unhealthy_this_month != 0
         ]
 
     def set_monthly_summary_as_send(self, *, year_month: str) -> None:

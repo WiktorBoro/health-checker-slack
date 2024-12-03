@@ -60,7 +60,7 @@ class MonthlySummary:
 
         summary = ""
         for url_with_monthly_dead_time in summary_for_moth:
-            summary += f"{url_with_monthly_dead_time.url}: {url_with_monthly_dead_time.unhealthy_this_month} min, efficiency: {(self.AVERAGE_MINUTES_IN_MONTH-url_with_monthly_dead_time.unhealthy_this_month)/self.AVERAGE_MINUTES_IN_MONTH}%\n"
+            summary += f"{url_with_monthly_dead_time.url}: {url_with_monthly_dead_time.unhealthy_this_month} min, efficiency: {round((self.AVERAGE_MINUTES_IN_MONTH-url_with_monthly_dead_time.unhealthy_this_month)/self.AVERAGE_MINUTES_IN_MONTH, 2)}%\n"
 
         if summary:
             self.connector.send_monthly_summary(summary=summary)
