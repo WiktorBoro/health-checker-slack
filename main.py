@@ -70,7 +70,7 @@ if __name__ == "__main__":
 
     handler = TimedRotatingFileHandler(
         filename=f"{current_path}/{logs_file_name}",
-        when="W",
+        when="W0",
         interval=2,
         backupCount=2,
     )
