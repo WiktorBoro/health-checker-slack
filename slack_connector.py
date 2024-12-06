@@ -37,26 +37,26 @@ class SlackConnector:
         if self.config.send_back_to_healthy:
             self._send_results(
                 health_results=health_check_dto.back_to_healthy,
-                message=self.DEFAULT_BACK_TO_HEALTHY_MESSAGE
-                or self.config.back_to_healthy_message,
+                message=self.config.back_to_healthy_message
+                or self.DEFAULT_BACK_TO_HEALTHY_MESSAGE,
             )
         if self.config.send_still_unhealthy:
             self._send_results(
                 health_results=self._get_still_unhealthy_ready_to_send(
                     still_unhealthy=health_check_dto.still_unhealthy
                 ),
-                message=self.DEFAULT_STILL_UNHEALTHY_MESSAGE
-                or self.config.still_unhealthy_message,
+                message=self.config.still_unhealthy_message
+                or self.DEFAULT_STILL_UNHEALTHY_MESSAGE,
             )
         if self.config.send_healthy:
             self._send_results(
                 health_results=health_check_dto.healthy,
-                message=self.DEFAULT_HEALTHY_MESSAGE or self.config.healthy_message,
+                message=self.config.healthy_message or self.DEFAULT_HEALTHY_MESSAGE,
             )
         if self.config.send_unhealthy:
             self._send_results(
                 health_results=health_check_dto.unhealthy,
-                message=self.DEFAULT_UNHEALTHY_MESSAGE or self.config.unhealthy_message,
+                message=self.config.unhealthy_message or self.DEFAULT_UNHEALTHY_MESSAGE,
             )
 
     def _get_still_unhealthy_ready_to_send(

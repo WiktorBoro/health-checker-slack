@@ -71,6 +71,14 @@ class MonthlySummary:
         self.repository.set_monthly_summary_as_send(year_month=current_year_month)
 
     def _get_percent_efficiency(self, *, unhealthy_this_month: int) -> float:
-        return math.floor(((self.AVERAGE_MINUTES_IN_MONTH-unhealthy_this_month)/self.AVERAGE_MINUTES_IN_MONTH* self.ONE_HUNDRED_PERCENT)*10**2)/10**2
-
-
+        return (
+            math.floor(
+                (
+                    (self.AVERAGE_MINUTES_IN_MONTH - unhealthy_this_month)
+                    / self.AVERAGE_MINUTES_IN_MONTH
+                    * self.ONE_HUNDRED_PERCENT
+                )
+                * 10**2
+            )
+            / 10**2
+        )
