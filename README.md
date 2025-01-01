@@ -176,3 +176,9 @@ f"{datetime.now()} - send to slack: success - text: {text}"
 ```
 
 Logs older than 30 days are automatically deleted. 
+
+## 6. TODO
+Q1 2025
+
+- async request
+- custom message per specified status code
