@@ -127,8 +127,8 @@ if __name__ == "__main__":
     if param == "--test":
         main.test()
     else:
-        send_monthly_summary.execute()
         main.execute(to_checks=to_checks)
+        send_monthly_summary.execute()
 
     logging.info("-----------------------------------------------")
     repository.commit()
