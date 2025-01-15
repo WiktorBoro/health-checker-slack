@@ -56,7 +56,7 @@ class SlackConnector:
         if self.config.send_unhealthy:
             self._send_results(
                 health_results=health_check_dto.unhealthy,
-                message=self.config.unhealthy_message or self.DEFAULT_UNHEALTHY_MESSAGE,
+                message=self.config.get_unhealthy_message(status_code=) or self.DEFAULT_UNHEALTHY_MESSAGE,
             )
 
     def _get_still_unhealthy_ready_to_send(
