@@ -1,5 +1,5 @@
 # dtos.py
-from typing import List
+from typing import List, Optional, Dict
 
 from attr import frozen, define
 
@@ -15,10 +15,18 @@ class SlackConnectorConfigDTO:
     hello_message: str = ""
     healthy_message: str = ""
     unhealthy_message: str = ""
+    status_code_unhealthy_message: Optional[Dict[int, str]] = None
     no_unhealthy_message: str = ""
     back_to_healthy_message: str = ""
     still_unhealthy_message: str = ""
     monthly_summary: str = ""
+
+    def get_unhealthy_message(self, *, status_code: Optional[int]) -> str:
+        if self.status_code_unhealthy_message and status_code:
+            return self.status_code_unhealthy_message.get(
+                status_code, self.unhealthy_message
+            )
+        return self.unhealthy_message
 
 
 @frozen(kw_only=True)
