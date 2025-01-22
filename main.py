@@ -50,7 +50,7 @@ class Main:
             current_unhealthy_urls=current_unhealthy_urls,
             health_check_dto=health_check_dto,
         )
-        self.slack_connector.send_health_check_report(health_check_dto=HealthCheckDTO)
+        self.slack_connector.send_health_check_report(health_check_dto=health_check_dto)
 
         if not any([health_check_dto.new_unhealthy, health_check_dto.still_unhealthy]):
             self.slack_connector.send_if_there_no_unhealthy()

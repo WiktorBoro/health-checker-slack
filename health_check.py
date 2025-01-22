@@ -29,7 +29,7 @@ class HealthCheck:
         to_checks: List[types.ToChecksTypedDict],
         current_unhealthy_urls: List[str],  # List[urls]
         health_check_dto: HealthCheckDTO,
-    ) -> HealthCheckDTO:
+    ) -> None:
         tasks = [
             self._health_check(
                 param=param,
@@ -52,7 +52,7 @@ class HealthCheck:
         health_result: HealthResultDTO,
         health_check_dto: HealthCheckDTO,
         current_unhealthy_urls: List[str],
-    ):
+    ) -> None:
         is_current_unhealthy = health_result.url in current_unhealthy_urls
         is_healthy = health_result.is_healthy
         if is_healthy:
