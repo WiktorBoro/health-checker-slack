@@ -33,7 +33,7 @@ class SlackConnector:
         self.connector = WebhookClient(url=slack_webhook_url)
         self.config = slack_connector_config
 
-    def send_health_check_report(self, health_check_dto: HealthCheckDTO):
+    def send_health_check_report(self, *, health_check_dto: HealthCheckDTO):
         if self.config.send_back_to_healthy:
             self._send_results(
                 health_results=health_check_dto.back_to_healthy,

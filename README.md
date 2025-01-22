@@ -160,7 +160,7 @@ crontab -e
 Replace `/health-check/source/bin/python` by your venv location.
 Replace `/health-check/health-check-slack/main.py` by your location of `main.py`
 ```
-*/1 * * * * /health-check/source/bin/python /health-check/health-check-slack/main.py
+* * * * * /health-check/source/bin/python /health-check/health-check-slack/main.py
 ```
 
 ## 5. Logs

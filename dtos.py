@@ -42,10 +42,10 @@ class HealthResultDTO:
     is_sent_to_slack: bool = False
 
 
-@frozen(kw_only=True)
+@define(kw_only=True)
 class HealthCheckDTO:
     healthy: List[HealthResultDTO]
-    unhealthy: List[HealthResultDTO]
+    new_unhealthy: List[HealthResultDTO]
     still_unhealthy: List[HealthResultDTO]
     back_to_healthy: List[HealthResultDTO]
 
