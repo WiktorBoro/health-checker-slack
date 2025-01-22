@@ -1,10 +1,11 @@
 # slack_connector.py
 from datetime import datetime
-from typing import List
+from typing import List, Dict
 
 from slack_sdk.webhook import WebhookClient
 import logging
 
+from constants import status
 from dtos import SlackConnectorConfigDTO, HealthCheckDTO, HealthResultDTO
 
 
@@ -56,7 +57,7 @@ class SlackConnector:
         if self.config.send_unhealthy:
             self._send_results(
                 health_results=health_check_dto.unhealthy,
-                message=self.config.get_unhealthy_message(status_code=) or self.DEFAULT_UNHEALTHY_MESSAGE,
+                messages=self.config.get_unhealthy_message(status_code=) or self.DEFAULT_UNHEALTHY_MESSAGE,
             )
 
     def _get_still_unhealthy_ready_to_send(
@@ -93,10 +94,11 @@ class SlackConnector:
     def _send_results(
         self,
         *,
-        message: str,
+        messages: Dict[status, str],
         health_results: List[HealthResultDTO],
     ):
         for health_result in health_results:
+            messages
             self._send(
                 text=message.format(
                     url=health_result.url,
