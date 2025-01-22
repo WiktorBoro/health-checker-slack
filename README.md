@@ -77,6 +77,7 @@ Available tags for each message (tags doesn't work only for `no_unhealthy_messag
 {url} # requested url
 {param} # requested param (look to `to_checks` section)
 {status_code} # status_code after request
+{error_message} # if request has some error message you can find it over this tag
 {is_healthy} # true/fals
 {how_long_was_unhealthy} # in min, if url was healthy this tag return 0
 {summary} # only for monthly summary string of: f"{url_with_monthly_dead_time.url}: {url_with_monthly_dead_time.unhealthy_this_month} min, efficiency: {(self.AVERAGE_MINUTES_IN_MONTH-url_with_monthly_dead_time.unhealthy_this_month)/self.AVERAGE_MINUTES_IN_MONTH}%\n"

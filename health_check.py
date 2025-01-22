@@ -77,25 +77,63 @@ class HealthCheck:
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(url, timeout=self.config.timeout) as response:
+                    status_code = response.status
                     health_result = HealthResultDTO(
-                        is_healthy=response.status_code == self.HEALTHY_STATUS_CODE,
-                        status_code=response.status_code,
+                        is_healthy=status_code == self.HEALTHY_STATUS_CODE,
+                        status_code=status_code,
                         param=param,
                         url=url,
                     )
-        except (
-            asyncio.TimeoutError,
-            aiohttp.ClientError,
-            ConnectTimeout,
-            ReadTimeout,
-        ):
+        except asyncio.TimeoutError:
             health_result = HealthResultDTO(
                 is_healthy=False,
-                status_code=408,
+                status_code=-1,
                 param=param,
                 url=url,
+                error_message="Client-side timeout",
             )
+        except aiohttp.ClientConnectionError:
+            health_result = HealthResultDTO(
+                is_healthy=False,
+                status_code=-1,
+                param=param,
+                url=url,
+                error_message="Connection error occurred",
+            )
+        except aiohttp.ClientResponseError as e:
+            health_result = HealthResultDTO(
+                is_healthy=False,
+                status_code=e.status,
+                param=param,
+                url=url,
+                error_message=str(e.message),
+            )
+        except aiohttp.InvalidURL:
+            health_result = HealthResultDTO(
+                is_healthy=False,
+                status_code=-1,
+                param=param,
+                url=url,
+                error_message="Invalid URL",
+            )
+        except aiohttp.ClientPayloadError:
+            health_result = HealthResultDTO(
+                is_healthy=False,
+                status_code=-1,
+                param=param,
+                url=url,
+                error_message="Payload error",
+            )
+        except aiohttp.ClientError as e:
+            health_result = HealthResultDTO(
+                is_healthy=False,
+                status_code=-1,
+                param=param,
+                url=url,
+                error_message=str(e),
+            )
+
         logging.info(
-            f"{datetime.now()} - url: {health_result.url} - param: {health_result.param} - status_code: {health_result.status_code} - is_healthy: {health_result.is_healthy}"
+            f"{datetime.now()} - url: {health_result.url} - param: {health_result.param} - status_code: {health_result.status_code} - is_healthy: {health_result.is_healthy} - error_message: {health_result.error_message}"
         )
         return health_result

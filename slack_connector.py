@@ -55,7 +55,7 @@ class SlackConnector:
             )
         if self.config.send_unhealthy:
             self._send_results(
-                health_results=health_check_dto.unhealthy,
+                health_results=health_check_dto.new_unhealthy,
                 message=self.config.unhealthy_message or self.DEFAULT_UNHEALTHY_MESSAGE,
             )
 
@@ -106,6 +106,7 @@ class SlackConnector:
                     how_long_was_unhealthy=self.repository.get_how_long_was_unhealthy(
                         url=health_result.url
                     ),
+                    error_message=health_result.error_message,
                 )
             )
             health_result.is_sent_to_slack = True

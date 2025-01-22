@@ -40,6 +40,7 @@ class HealthResultDTO:
     url: str
     param: str
     is_sent_to_slack: bool = False
+    error_message: str = ""
 
 
 @define(kw_only=True)
