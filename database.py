@@ -11,7 +11,6 @@ from dtos import HealthResultDTO, SlackConnectorConfigDTO, MonthlySummary
 class Database:
     DATABASE_BASE_FILE_NAME = "database_base.json"
     DATABASE_FILE_NAME = "database.json"
-    DATE_FORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 
     def __init__(
         self,
@@ -63,6 +62,7 @@ class Database:
                 self.data["to_checks"][unhealthy.url][
                     "last_send_at"
                 ] = datetime.now().isoformat()
+                self.data["to_checks"][unhealthy.url]["number_of_sent_reminders"] = 1
 
     def update_still_unhealthy_last_send(
         self, *, still_unhealthy: List[HealthResultDTO]
@@ -73,6 +73,7 @@ class Database:
                 self.data["to_checks"][unhealthy.url][
                     "last_send_at"
                 ] = datetime.now().isoformat()
+                self.data["to_checks"][unhealthy.url]["number_of_sent_reminders"] += 1
 
     def remove_unhealthy(self, *, back_to_healthy: List[HealthResultDTO]) -> None:
         for healthy in back_to_healthy:
@@ -118,11 +119,10 @@ class Database:
         return round(
             (
                 datetime.now()
-                - datetime.strptime(
+                - datetime.fromisoformat(
                     self.data["to_checks"]
                     .get(url, {})
                     .get("unhealthy_at", datetime.now().isoformat()),
-                    self.DATE_FORMAT,
                 )
             ).total_seconds()
             / 60,
@@ -136,10 +136,15 @@ class Database:
     ) -> bool:
         return (
             datetime.now()
-            - datetime.strptime(
+            - datetime.fromisoformat(
                 self.data["to_checks"]
                 .get(url, {})
                 .get("last_send_at", datetime.now().isoformat()),
-                self.DATE_FORMAT,
             )
-        ) > timedelta(minutes=config.send_still_unhealthy_delay)
+        ) > timedelta(
+            minutes=config.send_still_unhealthy_delay
+            + (
+                self.data["to_checks"].get(url, {}).get("number_of_sent_reminders", 1)
+                * config.increment_each_next_unhealthy_reminder
+            )
+        )

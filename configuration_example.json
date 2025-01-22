@@ -12,6 +12,7 @@
     "send_unhealthy": true,
     "send_still_unhealthy": true,
     "send_still_unhealthy_delay": 10,
+    "increment_each_next_unhealthy_reminder": 0,
     "send_back_to_healthy": true,
     "send_if_there_no_unhealthy": false,
     "hello_message": ":wave: Hi, we are connected! Let's go! :tada:",
