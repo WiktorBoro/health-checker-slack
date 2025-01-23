@@ -87,7 +87,7 @@ class HealthCheck:
         except asyncio.TimeoutError:
             health_result = HealthResultDTO(
                 is_healthy=False,
-                status_code=-1,
+                status_code=408,
                 param=param,
                 url=url,
                 error_message="Client-side timeout",

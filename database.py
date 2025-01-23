@@ -62,7 +62,7 @@ class Database:
                 self.data["to_checks"][unhealthy.url][
                     "last_send_at"
                 ] = datetime.now().isoformat()
-                self.data["to_checks"][unhealthy.url]["number_of_sent_reminders"] = 1
+                self.data["to_checks"][unhealthy.url]["number_of_sent_reminders"] = 0
 
     def update_still_unhealthy_last_send(
         self, *, still_unhealthy: List[HealthResultDTO]
@@ -144,7 +144,7 @@ class Database:
         ) > timedelta(
             minutes=config.send_still_unhealthy_delay
             + (
-                self.data["to_checks"].get(url, {}).get("number_of_sent_reminders", 1)
+                self.data["to_checks"].get(url, {}).get("number_of_sent_reminders", 0)
                 * config.increment_each_next_unhealthy_reminder
             )
         )
