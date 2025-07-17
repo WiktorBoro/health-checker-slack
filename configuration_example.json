@@ -17,10 +17,10 @@
     "send_if_there_no_unhealthy": false,
     "hello_message": ":wave: Hi, we are connected! Let's go! :tada:",
     "healthy_message": "URL {url} is fine :heart:",
-    "unhealthy_message": "URL {url} is dead :firecracker::skull_and_crossbones::firecracker:",
+    "unhealthy_message": "URL {url} is dead, status code: {status_code}, error message: {error_message} :firecracker::skull_and_crossbones::firecracker:",
     "no_unhealthy_message": "Everything is fine :green_heart:",
     "back_to_healthy_message": "URL {url}, back to live! :tada: Total dead time {how_long_was_unhealthy} min",
-    "still_unhealthy_message": "URL {url}, is still dead :firecracker::skull_and_crossbones::firecracker: Total dead time {how_long_was_unhealthy} min"
+    "still_unhealthy_message": "URL {url}, is still dead, status code: {status_code}, error message: {error_message} :firecracker::skull_and_crossbones::firecracker: Total dead time {how_long_was_unhealthy} min"
   },
   "to_checks": [
     {
