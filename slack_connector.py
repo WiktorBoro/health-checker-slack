@@ -40,6 +40,14 @@ class SlackConnector:
                 message=self.config.back_to_healthy_message
                 or self.DEFAULT_BACK_TO_HEALTHY_MESSAGE,
             )
+        elif self.config.send_back_to_healthy_only_after_still_unhealthy:
+            self._send_results(
+                health_results=self._get_back_to_healthy_only_after_still_unhealthy(
+                    back_to_healthy=health_check_dto.back_to_healthy
+                ),
+                message=self.config.back_to_healthy_message
+                or self.DEFAULT_BACK_TO_HEALTHY_MESSAGE,
+            )
         if self.config.send_still_unhealthy:
             self._send_results(
                 health_results=self._get_still_unhealthy_ready_to_send(
@@ -70,6 +78,19 @@ class SlackConnector:
             if self.repository.is_send_still_unhealthy_required(
                 url=unhealthy.url,
                 config=self.config,
+            )
+        ]
+
+    def _get_back_to_healthy_only_after_still_unhealthy(
+        self,
+        *,
+        back_to_healthy: List[HealthResultDTO],
+    ) -> List[HealthResultDTO]:
+        return [
+            healthy
+            for healthy in back_to_healthy
+            if self.repository.is_reminder_sent(
+                url=healthy.url,
             )
         ]
 

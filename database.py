@@ -148,3 +148,8 @@ class Database:
                 * config.increment_each_next_unhealthy_reminder
             )
         )
+
+    def is_reminder_sent(self, *, url: str) -> bool:
+        return (
+            self.data["to_checks"].get(url, {}).get("number_of_sent_reminders", 0) > 0
+        )

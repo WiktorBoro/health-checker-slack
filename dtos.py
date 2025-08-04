@@ -12,6 +12,7 @@ class SlackConnectorConfigDTO:
     send_still_unhealthy_delay: int = 30  # min
     increment_each_next_unhealthy_reminder: float = 0  # min
     send_back_to_healthy: bool = True
+    send_back_to_healthy_only_after_still_unhealthy: bool = False
     send_if_there_no_unhealthy: bool = False
     hello_message: str = ""
     healthy_message: str = ""
