@@ -31,12 +31,16 @@ class MonthlySummary:
         has_already_send_this_month = self.repository.has_already_send_this_month(
             year_month=current_year_month
         )
+        last_month_year_month = datetime(
+            year=last_month.year,
+            month=last_month.month,
+            day=1,
+        ).strftime("%Y-%m")
         summary_for_moth = self.repository.get_summary_for_moth(
-            year_month=datetime(
-                year=last_month.year,
-                month=last_month.month,
-                day=1,
-            ).strftime("%Y-%m")
+            year_month=last_month_year_month
+        )
+        count_100_percent = self.repository.get_count_100_percent_domains(
+            year_month=last_month_year_month
         )
 
         hour, minute = (self.config.send_at_hour or self.DEFAULT_SEND_AT_HOUR).split(
@@ -60,14 +64,35 @@ class MonthlySummary:
         ):
             return
 
-        summary = ""
-        for url_with_monthly_dead_time in summary_for_moth:
-            summary += "--------------------------------------------------\n"
-            summary += f"{url_with_monthly_dead_time.url}: {url_with_monthly_dead_time.unhealthy_this_month} min, efficiency: {self._get_percent_efficiency(unhealthy_this_month=url_with_monthly_dead_time.unhealthy_this_month)}%\n"
+        tier_high = []
+        tier_mid = []
+        tier_low = []
 
-        if summary:
-            self.connector.send_monthly_summary(summary=summary)
+        for entry in summary_for_moth:
+            efficiency = self._get_percent_efficiency(
+                unhealthy_this_month=entry.unhealthy_this_month
+            )
+            if efficiency >= 99.90:
+                tier_high.append((entry.url, efficiency))
+            elif efficiency >= 99.50:
+                tier_mid.append((entry.url, efficiency))
+            else:
+                tier_low.append((entry.url, efficiency))
 
+        summary = (
+            f"efficiency 100% number of domains: {count_100_percent}\n"
+            f"efficiency 100%-99.90% number of domains: {len(tier_high)}\n"
+            f"efficiency 99.90%-99.50% number of domains: {len(tier_mid)}\n"
+        )
+        if tier_low:
+            domains_detail = ", ".join(
+                f"{url}: {eff}%" for url, eff in tier_low
+            )
+            summary += f"efficiency below 99.50% number of domains: {len(tier_low)} [{domains_detail}]\n"
+        else:
+            summary += f"efficiency below 99.50% number of domains: 0\n"
+
+        self.connector.send_monthly_summary(summary=summary)
         self.repository.set_monthly_summary_as_send(year_month=current_year_month)
 
     def _get_percent_efficiency(self, *, unhealthy_this_month: int) -> float:

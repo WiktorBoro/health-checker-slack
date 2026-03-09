@@ -109,6 +109,17 @@ class Database:
             if url != "already_send_this_month" and unhealthy_this_month != 0
         ]
 
+    def get_count_100_percent_domains(self, *, year_month: str) -> int:
+        if year_month not in self.data["monthly_summary"]:
+            return 0
+        return sum(
+            1
+            for url, unhealthy_this_month in self.data["monthly_summary"][
+                year_month
+            ].items()
+            if url != "already_send_this_month" and unhealthy_this_month == 0
+        )
+
     def set_monthly_summary_as_send(self, *, year_month: str) -> None:
         self.data["monthly_summary"][year_month]["already_send_this_month"] = True
 
